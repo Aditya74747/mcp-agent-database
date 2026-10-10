@@ -9,8 +9,6 @@
 
 ![Demo: the agent answers a data question, then pauses for approval before writing a file](docs/demo.gif)
 
-*Running locally on qwen3:8b via Ollama (waiting time sped up).*
-
 ## What is this?
 
 I wanted to understand how AI agents actually use tools, and what stops them from doing something
@@ -125,12 +123,6 @@ uv run pytest          # tests
 uv run ruff check .    # lint
 uv run mypy            # type check
 ```
-
-## What's next
-
-- Fix the subfolder issue the eval found, then re-run the benchmark
-- Finer-grained permissions (e.g. allow writes only inside `reports/`)
-- Compare more models in the results table
 
 ## License
 
