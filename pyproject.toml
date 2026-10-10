@@ -1,0 +1,76 @@
+[project]
+name = "mcp-agent-database"
+version = "0.1.0"
+description = "Three production-style MCP servers (DuckDB SQL, document search, sandboxed workspace + GitHub) and a local-first agent host with human approval for sensitive actions."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Aditya Ghatage" }]
+requires-python = ">=3.12"
+keywords = ["mcp", "model-context-protocol", "agents", "ollama", "llm", "duckdb", "rag"]
+dependencies = [
+    "duckdb>=1.5.6",
+    "fastapi>=0.143.0",
+    "httpx>=0.28.1",
+    "mcp>=2.3,<3",
+    "pydantic-settings>=2.15.0",
+    "pypdf>=6.20.0",
+    "rich>=15.0.0",
+    "sqlglot>=30.21.0",
+    "sse-starlette>=3.5.0",
+    "typer>=0.27.3",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=3.27.0"]
+anthropic = ["anthropic>=1.13.0"]
+all = ["openai>=3.27.0", "anthropic>=1.13.0"]
+
+[project.scripts]
+mcp-agent-database = "mcp_agent_database.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "anyio>=4.15.1",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "respx>=0.23.1",
+    "ruff>=0.16.10",
+]
+
+[tool.uv.build-backend]
+module-name = "mcp_agent_database"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = ["integration: spawns real MCP server subprocesses or a live HTTP server"]
+filterwarnings = ["ignore::DeprecationWarning:websockets.*"]
+
+[tool.coverage.run]
+source = ["mcp_agent_database"]
+omit = ["src/mcp_agent_database/cli.py"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "ASYNC", "S"]
+ignore = ["S101", "S608", "RUF001"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B011"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/mcp_agent_database"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+check_untyped_defs = true

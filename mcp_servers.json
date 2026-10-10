@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "sql": {
+      "command": "${PYTHON}",
+      "args": ["-m", "mcp_agent_database.servers.sql_server"]
+    },
+    "docs": {
+      "command": "${PYTHON}",
+      "args": ["-m", "mcp_agent_database.servers.docs_server"]
+    },
+    "workspace": {
+      "command": "${PYTHON}",
+      "args": ["-m", "mcp_agent_database.servers.workspace_server"]
+    }
+  }
+}

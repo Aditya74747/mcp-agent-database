@@ -1,0 +1,23 @@
+# Python / uv
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+
+# Local config & secrets
+.env
+
+# Generated data (re-create with `uv run mcp-agent-database seed`)
+data/shop.duckdb
+data/shop.duckdb.wal
+data/sandbox/
+data/audit.jsonl
+evals/results/*.json
+!evals/results/.gitkeep

@@ -1,0 +1,43 @@
+# One command: `docker compose up --build`, then open http://localhost:8000
+# The first start downloads the model (~5 GB for qwen3:8b). Change it with FORGE_MODEL in .env.
+services:
+  ollama:
+    image: ollama/ollama:latest  # pin a specific version for reproducible deployments
+    volumes:
+      - ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: ollama:11434
+    entrypoint: ["sh", "-c", "ollama pull ${FORGE_MODEL:-qwen3:8b} && ollama pull ${FORGE_EMBED_MODEL:-nomic-embed-text}"]
+    restart: "no"
+
+  app:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      FORGE_OLLAMA_BASE_URL: http://ollama:11434
+      FORGE_EMBED_MODEL: ${FORGE_EMBED_MODEL:-nomic-embed-text}  # hybrid BM25 + vector search
+      FORGE_AUDIT_LOG: /app/data/runtime/audit.jsonl
+    ports:
+      - "127.0.0.1:8000:8000"  # localhost only: the agent can write files, don't expose it publicly
+    volumes:
+      - runtime:/app/data/runtime
+    depends_on:
+      ollama-pull:
+        condition: service_completed_successfully
+
+volumes:
+  ollama:
+  runtime:
