@@ -20,8 +20,9 @@ servers:
 Any tool that isn't explicitly read-only **pauses the agent until a human approves it**, in the
 terminal or with Approve/Deny buttons in the web UI. Every decision goes to an audit log.
 
-> 📽️ **Demo:** add `docs/demo.gif` here (a 30-second screen recording of the web UI answering a question and asking for approval).
+![Demo: the agent answers a data question, then pauses for approval before writing a file](docs/demo.gif)
 
+*Running locally on qwen3:8b via Ollama (waiting time sped up).*
 ---
 
 ## Architecture
